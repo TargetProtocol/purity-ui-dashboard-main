@@ -1,0 +1,45 @@
+
+[
+    {
+        "id" : 1,
+        "title" : "Smoking Allen",
+        "usdAmount" : "$142,840",
+        "percentage" : "55",
+        "imageURL" : "image1.3bb57d405473320911e8.GIF",
+        "owner" : "Mike"
+    },
+    {
+        "id" : 2,
+        "title" : "Old Naija",
+        "usdAmount" : "$138,320",
+        "percentage" : "24",
+        "imageURL" : "image2.32f6c8c916d9ae7bd458.GIF",
+        "owner" : "Duncan"
+
+    },
+    {
+        "id" : 3,
+        "title" : "Weird Rabbit",
+        "usdAmount" : "$51,920",
+        "percentage" : "32",
+        "imageURL" : "image4.a3aed1f5c86c8b399197.GIF",
+        "owner" : "Mary"
+    },
+    {
+        "id" : 4,
+        "title" : "Space Clown",
+        "usdAmount" : "$32,457",
+        "percentage" : "142",
+        "imageURL" : "image5.b549f655a5556996ee6d.GIF",
+        "owner" : "Ron Chan"
+    },
+    {
+        "id" : 5,
+        "title" : "Lazer God",
+        "usdAmount" : "$20,243",
+        "percentage" : "74",
+        "imageURL" : "IMG_9427.ef0f9688d04a85acf970.JPG",
+        "owner" : "Range"
+    }
+    
+]
