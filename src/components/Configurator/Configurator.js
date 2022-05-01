@@ -99,7 +99,7 @@ export default function Configurator(props) {
                     </Link>
                     <Link
                       isExternal="true"
-                      href="https://www.instagram.com/plutoexchange"
+                      href="https://www.instagram.com/plutoexchange_"
                     >
                       <Button
                         colorScheme="facebook"

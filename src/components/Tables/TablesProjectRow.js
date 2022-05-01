@@ -1,15 +1,14 @@
-import React from "react";
+import React from 'react';
+
 import {
-  Tr,
-  Td,
+  Avatar,
   Flex,
-  Text,
   Progress,
-  Icon,
-  Button,
+  Td,
+  Text,
+  Tr,
   useColorModeValue,
-} from "@chakra-ui/react";
-import { FaEllipsisV } from "react-icons/fa";
+} from '@chakra-ui/react';
 
 function DashboardTableRow(props) {
   const { logo, name, status, budget, progression } = props;
@@ -18,7 +17,7 @@ function DashboardTableRow(props) {
     <Tr>
       <Td minWidth={{ sm: "250px" }} pl="0px">
         <Flex alignItems="center" py=".8rem" minWidth="100%" flexWrap="nowrap">
-          <Icon as={logo} h={"24px"} w={"24px"} me="18px" />
+          <Avatar src={logo} h={"24px"} w={"24px"} me="18px" />
           <Text
             fontSize="md"
             color={textColor}

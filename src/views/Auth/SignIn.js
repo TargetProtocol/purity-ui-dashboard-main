@@ -8,11 +8,7 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
 } from 'firebase/auth';
-import {
-  FaFacebook,
-  FaGoogle,
-  FaTwitter,
-} from 'react-icons/fa';
+import { FaGoogle } from 'react-icons/fa';
 
 // Chakra imports
 import {
@@ -23,6 +19,7 @@ import {
   FormLabel,
   HStack,
   Icon,
+  Image,
   Input,
   Link,
   Switch,
@@ -119,6 +116,12 @@ function SignIn() {
       justifySelf="center"
       overflow="hidden"
     >
+      <div>
+        <Box width={300} marginLeft={10} marginTop={10}>
+          <Image src="https://plutoexchange.org/wp-content/uploads/2022/04/Solana-40-e1650882590935.png" />
+        </Box>
+      </div>
+
       <Box
         position="absolute"
         minH={{ base: "70vh", md: "50vh" }}
@@ -147,14 +150,14 @@ function SignIn() {
           Welcome to Pluto Exchange
         </Text>
         <Text
-          fontSize="2xl"
+          fontSize="l"
           color="white"
           fontWeight="normal"
           mt="10px"
           mb="26px"
           w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
         >
-          Profitable trade is all we give out!
+          THE FUTURE OF DECENTRALIZED FINANCE
         </Text>
       </Flex>
       <Flex alignItems="center" justifyContent="center" mb="60px" mt="20px">
@@ -184,6 +187,14 @@ function SignIn() {
               w="75px"
               h="75px"
               borderRadius="15px"
+              transition="all .25s ease"
+            ></Flex>
+            <Flex
+              justify="center"
+              align="center"
+              w="75px"
+              h="75px"
+              borderRadius="15px"
               border="1px solid lightgray"
               cursor="pointer"
               transition="all .25s ease"
@@ -205,40 +216,8 @@ function SignIn() {
               w="75px"
               h="75px"
               borderRadius="15px"
-              border="1px solid lightgray"
-              cursor="pointer"
               transition="all .25s ease"
-              _hover={{ filter: "brightness(120%)", bg: bgIcons }}
-            >
-              <Link href="#">
-                <Icon
-                  as={FaTwitter}
-                  w="30px"
-                  h="30px"
-                  _hover={{ filter: "brightness(120%)" }}
-                />
-              </Link>
-            </Flex>
-            <Flex
-              justify="center"
-              align="center"
-              w="75px"
-              h="75px"
-              borderRadius="15px"
-              border="1px solid lightgray"
-              cursor="pointer"
-              transition="all .25s ease"
-              _hover={{ filter: "brightness(120%)", bg: bgIcons }}
-            >
-              <Link>
-                <Icon
-                  as={FaFacebook}
-                  w="30px"
-                  h="30px"
-                  _hover={{ filter: "brightness(120%)" }}
-                />
-              </Link>
-            </Flex>
+            ></Flex>
           </HStack>
           <Text
             fontSize="lg"

@@ -1,5 +1,12 @@
-import { Box, Flex, Icon, Text, useColorModeValue } from "@chakra-ui/react";
-import React from "react";
+import React from 'react';
+
+import {
+  Box,
+  Flex,
+  Image,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
 
 function TransactionRow(props) {
   const textColor = useColorModeValue("gray.700", "white");
@@ -25,7 +32,7 @@ function TransactionRow(props) {
           w="35px"
           h="35px"
         >
-          <Icon as={logo} />
+          <Image src={logo} />
         </Box>
         <Flex direction="column">
           <Text

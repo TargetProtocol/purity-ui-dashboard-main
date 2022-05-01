@@ -1,10 +1,16 @@
+import React, { useState } from 'react';
+
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from 'views/Auth/firebase-config';
+
 /*eslint-disable*/
 // chakra imports
 import {
-  Box, useColorModeValue
-} from "@chakra-ui/react";
-import React from "react";
-import SidebarContent from "./SidebarContent";
+  Box,
+  useColorModeValue,
+} from '@chakra-ui/react';
+
+import SidebarContent from './SidebarContent';
 
 // FUNCTIONS
 
@@ -25,6 +31,12 @@ function Sidebar(props) {
     sidebarRadius = "16px";
     sidebarMargins = "16px 0px 16px 16px";
   }
+
+  const [user, setUser] = useState({});
+  // getiing user data and displaying
+  onAuthStateChanged(auth, (currentUser) => {
+    setUser(currentUser);
+  });
 
   // SIDEBAR
   return (
@@ -47,18 +59,16 @@ function Sidebar(props) {
           m={sidebarMargins}
           borderRadius={sidebarRadius}
         >
-          <SidebarContent routes={routes}
-        logoText={"PURITY UI DASHBOARD"}
-        display="none"
-        sidebarVariant={sidebarVariant}
-        />
+          <SidebarContent
+            routes={routes}
+            logoText={user?.email}
+            display="none"
+            sidebarVariant={sidebarVariant}
+          />
         </Box>
       </Box>
     </Box>
   );
 }
-
-
-
 
 export default Sidebar;

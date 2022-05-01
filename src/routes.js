@@ -1,20 +1,15 @@
-// import
-import Dashboard from "views/Dashboard/Dashboard";
-import Tables from "views/Dashboard/Tables";
-import Billing from "views/Dashboard/Billing";
-import Profile from "views/Dashboard/Profile";
-// import Ramper from "views/Dashboard/Ramper";
-import SignIn from "views/Auth/SignIn.js";
-import SignUp from "views/Auth/SignUp.js";
-
 import {
+  CreditIcon,
   HomeIcon,
   StatsIcon,
-  CreditIcon,
-  PersonIcon,
-  DocumentIcon,
-  RocketIcon,
-} from "components/Icons/Icons";
+} from 'components/Icons/Icons';
+// import Ramper from "views/Dashboard/Ramper";
+import SignIn from 'views/Auth/SignIn.js';
+import SignUp from 'views/Auth/SignUp.js';
+import Billing from 'views/Dashboard/Billing';
+// import
+import Dashboard from 'views/Dashboard/Dashboard';
+import Tables from 'views/Dashboard/Tables';
 
 var dashRoutes = [
   {
@@ -33,16 +28,7 @@ var dashRoutes = [
     component: Dashboard,
     layout: "/admin",
   },
-  
-  {
-    path: "/profile",
-    name: "Profile",
-    rtlName: "لوحة القيادة",
-    icon: <PersonIcon color="inherit" />,
-    secondaryNavbar: true,
-    component: Profile,
-    layout: "/admin",
-  },
+
   {
     path: "/billing",
     name: "Buy Crypto with Card",

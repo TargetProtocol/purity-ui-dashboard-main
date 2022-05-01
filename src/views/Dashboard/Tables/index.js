@@ -10,12 +10,7 @@ import LineChart from 'components/Charts/LineChart';
 import { CreditIcon } from 'components/Icons/Icons.js';
 import img1 from 'components/images/images';
 import { onAuthStateChanged } from 'firebase/auth';
-import {
-  dashboardTableData,
-  newestTransactions,
-  olderTransactions,
-  tablesTableData,
-} from 'variables/general';
+import { tablesTableData } from 'variables/general';
 
 import {
   LockIcon,
@@ -40,7 +35,7 @@ import WorkWithTheRockets from './components/WorkWithTheRockets';
 console.log(img1);
 
 function stakeClicked() {
-  alert("this clicked");
+  console.log(tablesTableData);
 }
 
 function Tables() {
@@ -50,25 +45,97 @@ function Tables() {
     setUser(currentUser);
   });
 
-  // getting customer's data from api endpoint
-
-  const [customerData, setCustomerData] = useState([]);
+  // getting Top 6 users data
+  const [top6Data, setTop6Data] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:7000/customers")
+      .get("http://31.220.63.27:8080/api/topsixusers")
+      .then((res) => {
+        setTop6Data(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    axios
+      .get("http://31.220.63.27:8080/api/topsixnfts")
+      .then((res) => {
+        setTopSixNfts(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+
+    axios
+      .get("http://31.220.63.27:8080/api/activeusersection")
+      .then((res) => {
+        setActiveUser(res.data);
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err.message);
+      });
+    axios
+      .get("http://31.220.63.27:8080/api/customer")
       .then((res) => {
         setCustomerData(res.data);
+        setNewestTransactions(res?.data[0].userNewTranaction);
+        setOlderTransactions(res?.data[0].userOldTransaction);
       })
       .catch((err) => {
         console.log(err.message);
       });
   }, []);
 
+  const [activeUser, setActiveUser] = useState("");
+
+  // getting Top 6 users Nft
+  const [topSixNfts, setTopSixNfts] = useState([]);
+
+  const [newestTransactions, setNewestTransactions] = useState([]);
+  const [olderTransactions, setOlderTransactions] = useState([]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get("http://31.220.63.27:8080/api/topsixnfts")
+  //     .then((res) => {
+  //       setTopSixNfts(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //     });
+  // }, []);
+
+  // getting customer's data from api endpoint
+
+  const [customerData, setCustomerData] = useState([]);
+
+  // useEffect(() => {
+  //   axios
+  //     .get("http://31.220.63.27:8080/api/customer")
+  //     .then((res) => {
+  //       setCustomerData(res.data);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.message);
+  //     });
+  // }, []);
+
   const res = customerData.find(findUser);
+
+  function callUserData() {
+    console.log(newestTransactions);
+  }
 
   function findUser(person) {
     return person.userUid === user?.uid;
+  }
+
+  function runthis() {
+    console.log(customerData);
+  }
+  function sendUserWelcome() {
+    const [userEmailAddress, setUserEmailAddress] = useState("");
   }
 
   if (!user) {
@@ -87,14 +154,13 @@ function Tables() {
             <WorkWithTheRockets
               title={"Balance Overview"}
               nameValue={"Total USD: "}
-              amount={res?.money || "$0.00"}
+              amount={res?.money || "0.00"}
               staked={"Staked: "}
               stakedCrypto={res?.stakedCrypto}
               stakedIcon={<LockIcon color="blue.500" />}
-              stakedAmount={res?.staked || "$0.00"}
+              stakedAmount={res?.staked}
               icon={<CreditIcon color="blue.500" />}
               nftIcon={<TriangleUpIcon color="blue.500" />}
-              nftAmount={res?.nftAmount || "No NFT hodlings..."}
               description={"NFT Holdings: "}
             />
             <BuiltByDevelopers
@@ -117,12 +183,12 @@ function Tables() {
           >
             <SalesOverview
               title={"Trades Overview"}
-              percentage={3873.45}
+              percentage={activeUser[0]?.percentage}
               chart={<LineChart />}
             />
             <ActiveUsers
               title={"Active Users"}
-              percentage={62}
+              percentage={activeUser[0]?.percentage}
               chart={<BarChart />}
             />
             <div></div>
@@ -130,19 +196,19 @@ function Tables() {
           <Authors
             title={"Top 6 Users"}
             captions={["Users", "Function", "Status"]}
-            data={tablesTableData}
+            data={top6Data}
           />
           <Projects
             title={"Top 6 NFTs"}
             captions={["NFT", "Price", "", "Completion"]}
-            data={dashboardTableData}
+            data={topSixNfts}
           />
           <Grid templateColumns={{ sm: "1fr", lg: "1.6fr 1.2fr" }}>
             <Transactions
-              title={"Your Transactions"}
-              date={"23 - 30 March"}
-              newestTransactions={newestTransactions}
-              olderTransactions={olderTransactions}
+              title={"Transactions History"}
+              date={""}
+              newestTransactions={res?.userNewTranaction}
+              olderTransactions={res?.userOldTransaction}
             />
           </Grid>
         </Flex>

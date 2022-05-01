@@ -50,7 +50,7 @@ export default function Dashboard(props) {
 
   const [posts, setPosts] = useState([]);
 
-  const nftUrl = "http://localhost:8000/nfts/";
+  const nftUrl = "http://31.220.63.27:8080/api/nftmarket";
 
   useEffect(() => {
     axios
@@ -87,34 +87,13 @@ export default function Dashboard(props) {
 
   const [isPending, setIsPending] = useState(true);
 
-  const sendNftObject = () => {
-    fetch(
-      "https://data.mongodb-api.com/app/data-bqahq/endpoint/data/beta/action/insertOne",
-      {
-        method: "POST",
-        mode: "cors",
-        headers: {
-          "Content-Type": "application/json",
-          "api-key":
-            "nenBCF99Xojo8qli5IbxdtbcEswPNBjdr7ofVdywpPSEFWFes5ed80vxWv8BFyuS",
-        },
-        body: {
-          dataSource: "Cluster0",
-          database: "household",
-          collection: "pets",
-          document: { name: "Sheep", breed: "Gaaa", age: 2 },
-        },
-      }
-    );
-  };
-
   // handing received data from api endpoint
 
   const [customerData, setcustomerData] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:7000/customers")
+      .get("http://31.220.63.27:8080/api/customer")
       .then((res) => {
         setcustomerData(res.data);
       })

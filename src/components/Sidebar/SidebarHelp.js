@@ -1,8 +1,15 @@
-import { QuestionIcon } from "@chakra-ui/icons";
-import { Button, Flex, Link, Text } from "@chakra-ui/react";
-import SidebarHelpImage from "assets/img/SidebarHelpImage.png";
-import IconBox from "components/Icons/IconBox";
-import React from "react";
+import React from 'react';
+
+import SidebarHelpImage from 'assets/img/SidebarHelpImage.png';
+import IconBox from 'components/Icons/IconBox';
+
+import { QuestionIcon } from '@chakra-ui/icons';
+import {
+  Button,
+  Flex,
+  Link,
+  Text,
+} from '@chakra-ui/react';
 
 export function SidebarHelp(props) {
   // Pass the computed styles into the `__css` prop
@@ -30,7 +37,7 @@ export function SidebarHelp(props) {
       </Text>
       <Link
         w="100%"
-        href="https://google.com"
+        href="https://plutoexchange.org/plutoexchange/otherfiles/PlutoExchangeWhitepaper.pdf"
         target="_blank"
       >
         <Button

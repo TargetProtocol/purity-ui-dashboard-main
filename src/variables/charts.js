@@ -86,11 +86,11 @@ export const barChartOptions = {
 export const lineChartData = [
   {
     name: "NFTs",
-    data: [50, 100, 200, 300],
+    data: [50, 100, 200, 300, 350, 350, 350, 350, 350],
   },
   {
     name: "Cryptocurrency",
-    data: [30, 60, 40, 130],
+    data: [30, 60, 40, 130, 150, 150, 150, 150, 150],
   },
 ];
 

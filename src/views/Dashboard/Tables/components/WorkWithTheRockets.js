@@ -54,6 +54,8 @@ const WorkWithTheRockets = ({
   stakedAmount,
   stakedCrypto,
   stakedIcon,
+  dollarSign,
+  stakedCutter,
 }) => {
   const overlayRef = React.useRef();
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -65,21 +67,21 @@ const WorkWithTheRockets = ({
 
   // getting customer's data from remote api
 
-  const [customerData, setCustomerData] = useState([]);
+  const [customersData, setCustomersData] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:7000/customers")
+      .get("http://31.220.63.27:8080/api/customer")
       .then((res) => {
-        setCustomerData(res.data);
+        setCustomersData(res.data);
       })
       .catch((err) => {
         console.log(err.message);
       });
   }, []);
-  console.log(customerData);
+  console.log(customersData);
 
-  const res = customerData.find(findUser);
+  const res = customersData.find(findUser);
 
   function findUser(person) {
     return person.userUid === user?.uid;
@@ -88,9 +90,131 @@ const WorkWithTheRockets = ({
 
   // customerNftBalance is the displaced nfts on dashboard base on user holdings
 
-  console.log(customerNftBalance + "here is customers nfts");
+  console.log(customerNftBalance);
 
   const textColor = useColorModeValue("gray.700", "white");
+
+  // redirecting user to another page
+  function redirect() {
+    location.replace("billing");
+  }
+
+  const [withdrawAmount, setWithdrawAmount] = useState("");
+
+  const [userWallet, setUserWallet] = useState("");
+  const [withdrawalChain, setWithdrawalChain] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  const [usdTransferAmount, setUsdTransferAmount] = useState("");
+  const [nftName, setNftName] = useState("");
+
+  const handleUsdTransfer = (e) => {
+    const senderEmail = user.email;
+    const usdTransferDetails = { usdTransferAmount, userEmail, senderEmail };
+
+    swal({
+      title: "Want to continue?",
+      text:
+        "Are you sure you want to send $" +
+        usdTransferAmount +
+        " to " +
+        userEmail,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Your transfer is pending and will update soon", {
+          icon: "success",
+        });
+        fetch("http://31.220.63.27:8080/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(usdTransferDetails),
+        }).then(() => {});
+        setUsdTransferAmount("");
+        setUserEmail("");
+        onClose();
+      } else {
+        swal("Come back later to transfer", { icon: "error" });
+      }
+      setUsdTransferAmount("");
+      setUserEmail("");
+      onClose();
+    });
+  };
+
+  const handleNftTransfer = (e) => {
+    const senderEmail = user.email;
+    const usdTransferNftDetails = { nftName, userEmail, senderEmail };
+
+    swal({
+      title: "Want to continue?",
+      text: "Are you sure you want to send " + nftName + " to " + userEmail,
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Your transfer is pending and will update soon", {
+          icon: "success",
+        });
+        fetch("http://31.220.63.27:8080/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(usdTransferNftDetails),
+        }).then(() => {});
+        setUserEmail("");
+        setNftName("");
+        onClose();
+      } else {
+        swal("Come back later to transfer", { icon: "error" });
+      }
+      setUserEmail("");
+      setNftName("");
+      onClose();
+    });
+  };
+
+  const handleWithdraw = (e) => {
+    const senderEmail = user.email;
+    const usdWithdrawalDetails = {
+      withdrawAmount,
+      userWallet,
+      withdrawalChain,
+      senderEmail,
+    };
+    console.log(usdWithdrawalDetails);
+
+    swal({
+      title: "Want to continue?",
+      text: "Are you sure you want to Withdraw $" + withdrawAmount + "?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        swal("Your transfer is pending and will update soon", {
+          icon: "success",
+        });
+        fetch("http://31.220.63.27:8080/api/orders", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(usdWithdrawalDetails),
+        }).then(() => {});
+        setWithdrawalChain("Select Chain");
+        setWithdrawAmount("");
+        setUserWallet("");
+        onClose();
+      } else {
+        swal("Come back later to transfer", { icon: "error" });
+      }
+      setWithdrawAmount("");
+      setWithdrawalChain("Select Chain");
+      setUserWallet("");
+      onClose();
+    });
+  };
 
   return (
     <>
@@ -110,7 +234,12 @@ const WorkWithTheRockets = ({
               <TabPanels>
                 <TabPanel>
                   <Flex direction="row">
-                    <Button width={200} height={110} bg="transparent">
+                    <Button
+                      width={200}
+                      height={110}
+                      bg="transparent"
+                      onClick={redirect}
+                    >
                       <img
                         src={creditCardIcon}
                         alt="nft-image"
@@ -122,7 +251,7 @@ const WorkWithTheRockets = ({
                       width={200}
                       height={110}
                       bg="transparent"
-                      onClick={copyCryptoAddress}
+                      onClick={redirect}
                     >
                       <img
                         src={cryptoIcon}
@@ -139,6 +268,8 @@ const WorkWithTheRockets = ({
                       placeholder="Enter Wallet Address"
                       color="white"
                       type="text"
+                      value={userWallet || ""}
+                      onChange={(e) => setUserWallet(e.target.value)}
                       _placeholder={{ color: "grey" }}
                     />
                     <Flex direction="row" gap={5}>
@@ -146,16 +277,27 @@ const WorkWithTheRockets = ({
                         placeholder="Amount (USD)"
                         color="white"
                         type="number"
+                        value={withdrawAmount || ""}
+                        onChange={(e) => setWithdrawAmount(e.target.value)}
                         _placeholder={{ color: "grey" }}
                       />
-                      <Select placeholder="Select Chain" width="300px">
-                        <option value="option1">Doge</option>
-                        <option value="option2">Ethereum</option>
-                        <option value="option3">Litecoin</option>
-                        <option value="option4">Smart Chain</option>
+                      <Select
+                        placeholder="Select Chain"
+                        width="300px"
+                        value={withdrawalChain}
+                        onChange={(e) =>
+                          setWithdrawalChain(e.target.value) || ""
+                        }
+                      >
+                        <option value="Doge">Doge</option>
+                        <option value="Ethereum">Ethereum</option>
+                        <option value="Litecoin">Litecoin</option>
+                        <option value="Smart Chain">Smart Chain</option>
                       </Select>
                     </Flex>
-                    <Button colorScheme="blue">Confirm</Button>
+                    <Button colorScheme="blue" onClick={handleWithdraw}>
+                      Confirm
+                    </Button>
                   </Flex>
                 </TabPanel>
                 <TabPanel>
@@ -164,15 +306,21 @@ const WorkWithTheRockets = ({
                       placeholder="Enter User's Email Address"
                       color="white"
                       type="text"
+                      value={userEmail || ""}
+                      onChange={(e) => setUserEmail(e.target.value)}
                       _placeholder={{ color: "grey" }}
                     />
                     <Input
                       placeholder="Amount (USD)"
                       color="white"
                       type="number"
+                      value={usdTransferAmount || ""}
+                      onChange={(e) => setUsdTransferAmount(e.target.value)}
                       _placeholder={{ color: "grey" }}
                     />
-                    <Button colorScheme="blue">Confirm</Button>
+                    <Button colorScheme="blue" onClick={handleUsdTransfer}>
+                      Confirm
+                    </Button>
                   </Flex>
                 </TabPanel>
                 <TabPanel>
@@ -181,16 +329,22 @@ const WorkWithTheRockets = ({
                       placeholder="Enter User's Email Address"
                       color="white"
                       type="text"
+                      value={userEmail || ""}
+                      onChange={(e) => setUserEmail(e.target.value)}
                       _placeholder={{ color: "grey" }}
                     />
                     <Input
                       placeholder="NFT Name"
                       color="white"
                       type="text"
+                      value={nftName || ""}
+                      onChange={(e) => setNftName(e.target.value)}
                       _placeholder={{ color: "grey" }}
                     />
 
-                    <Button colorScheme="blue">Confirm</Button>
+                    <Button colorScheme="blue" onClick={handleNftTransfer}>
+                      Confirm
+                    </Button>
                   </Flex>
                 </TabPanel>
               </TabPanels>
@@ -241,6 +395,14 @@ const WorkWithTheRockets = ({
                   color="green.400"
                   pb=".3rem"
                 >
+                  {dollarSign}
+                </Text>
+                <Text
+                  fontSize="15px"
+                  fontWeight="bold"
+                  color="green.400"
+                  pb=".3rem"
+                >
                   {amount}
                 </Text>
               </Flex>
@@ -248,6 +410,14 @@ const WorkWithTheRockets = ({
               <Flex direction="row" gap={1}>
                 <Text fontSize="l" color={textColor} pb=".3rem">
                   {stakedIcon} {staked}
+                </Text>
+                <Text
+                  fontSize="15px"
+                  fontWeight="bold"
+                  color="green.400"
+                  pb=".3rem"
+                >
+                  {dollarSign}
                 </Text>
 
                 <Text
@@ -258,6 +428,7 @@ const WorkWithTheRockets = ({
                 >
                   {stakedAmount}
                 </Text>
+                <Text>{stakedCutter}</Text>
                 <Text
                   fontSize="15px"
                   fontWeight="bold"

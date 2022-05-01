@@ -1,21 +1,33 @@
-// Chakra imports
-import { ChakraProvider, Portal, useDisclosure } from "@chakra-ui/react";
-import { RtlProvider } from "components/RTLProvider/RTLProvider";
-import Configurator from "components/Configurator/Configurator";
-import Footer from "components/Footer/Footer.js";
+import React, { useState } from 'react';
+
+import Configurator from 'components/Configurator/Configurator';
+import Footer from 'components/Footer/Footer.js';
 // Layout components
-import AdminNavbar from "components/Navbars/AdminNavbar.js";
-import Sidebar from "components/Sidebar";
-import React, { useState } from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
-import routes from "routes.js";
+import AdminNavbar from 'components/Navbars/AdminNavbar.js';
+import { RtlProvider } from 'components/RTLProvider/RTLProvider';
+import Sidebar from 'components/Sidebar';
+import {
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
+import routes from 'routes.js';
 // Custom Chakra theme
-import theme from "theme/theme.js";
-import FixedPlugin from "../components/FixedPlugin/FixedPlugin";
+import theme from 'theme/theme.js';
+
+// Chakra imports
+import {
+  ChakraProvider,
+  Portal,
+  useDisclosure,
+} from '@chakra-ui/react';
+
+import FixedPlugin from '../components/FixedPlugin/FixedPlugin';
 // Custom components
-import MainPanel from "../components/Layout/MainPanel";
-import PanelContainer from "../components/Layout/PanelContainer";
-import PanelContent from "../components/Layout/PanelContent";
+import MainPanel from '../components/Layout/MainPanel';
+import PanelContainer from '../components/Layout/PanelContainer';
+import PanelContent from '../components/Layout/PanelContent';
+
 export default function Dashboard(props) {
   const { ...rest } = props;
   // states and functions
@@ -97,7 +109,7 @@ export default function Dashboard(props) {
       <RtlProvider>
         <Sidebar
           routes={routes}
-          logoText={"PURITY UI DASHBOARD"}
+          logoText={"PLUTO EXCHANGE"}
           display="none"
           sidebarVariant={sidebarVariant}
           {...rest}
@@ -112,7 +124,7 @@ export default function Dashboard(props) {
           <Portal>
             <AdminNavbar
               onOpen={onOpen}
-              logoText={"PURITY UI DASHBOARD"}
+              logoText={"PLUTO EXCHANGE"}
               brandText={getActiveRoute(routes)}
               secondary={getActiveNavbar(routes)}
               fixed={fixed}

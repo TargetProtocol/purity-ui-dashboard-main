@@ -15,6 +15,7 @@ import {
   toast,
   ToastContainer,
 } from 'react-toastify';
+import swal from 'sweetalert';
 import { auth } from 'views/Auth/firebase-config';
 
 // Chakra imports
@@ -53,7 +54,7 @@ const MiniStatistics = ({
     const customersNftBalance = customer.nftBalanceUrl;
 
     console.log(nftPrice);
-    convertBalanceToNumbers();
+
     console.log(nftAmount);
     console.log(customerAmount);
     // console.log(returnNftObject);
@@ -64,18 +65,42 @@ const MiniStatistics = ({
 
     console.log(userBoughtNftId);
 
-    // if ((customerAmount) => nftAmount) {
-    //   console.log("customer is eligible to buy");
-    // }
-    // let voteable = customerAmount < nftAmount ? "you cant buy" : "you can buy";
-    // console.log(voteable + " this nft");
-    if (customerAmount > nftAmount) {
+    const customerEmail = user.email;
+
+    const nftBuy = { title, usdAmount, customerEmail };
+
+    if (customer?.money > nftAmount) {
       document.getElementById("buyButton").disabled = true;
-      triggerSuccess();
-      nftDelete();
-      setTimeout(waitBeforeReload, 3000);
+
+      swal({
+        title: "Want to continue?",
+        text: "Buy " + title + " for " + usdAmount,
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      }).then((willDelete) => {
+        if (willDelete) {
+          fetch("http://31.220.63.27:8080/api/buynft", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(nftBuy),
+          }).then(() => {
+            console.log(nftBuy);
+            console.log("new Staking added");
+          });
+          triggerSuccess();
+          onClose();
+          swal("You successfully bought " + title, {
+            icon: "success",
+          });
+        } else {
+          onClose();
+          swal("Goodbye!", { icon: "error" });
+        }
+      });
     } else {
       triggerFailure();
+      document.getElementById("buyButton").disabled = true;
     }
   }
 
@@ -85,15 +110,9 @@ const MiniStatistics = ({
 
   // api delete function
   const nftDelete = () => {
-    fetch("http://localhost:8000/nfts/" + userBoughtNftId, {
+    fetch("http://31.220.63.27:8080/api/nftmarket" + userBoughtNftId, {
       method: "DELETE",
     });
-  };
-
-  const getData = () => {
-    fetch("https://jsonplaceholder.typicode.com/todos/1")
-      .then((response) => response.json())
-      .then((json) => console.log(json));
   };
 
   // getData();
@@ -103,25 +122,68 @@ const MiniStatistics = ({
   const [sendData, setSendData] = useState({});
 
   const crappyData = {
-    userId: "1",
-    title: "crappy shit",
-    body: "I just posted some crappy shits",
+    data1: {
+      name: "We Move",
+    },
+    data2: {
+      name: "Lets moon",
+      age: "350",
+      money: "1",
+      staked: "1",
+    },
   };
 
-  // setSendData(crappyData);
-
-  function rendersPost() {
-    setSendData(crappyData);
-    useEffect(() => {
-      axios
-        .post("https://jsonplaceholder.typicode.com/posts", sendData)
-        .then((responses) => {
-          console.log(responses);
-        })
-        .catch((error) => {
-          console.log(error);
+  function testingSweetAlert() {
+    swal({
+      title: "Want to continue?",
+      text: "Are you sure you wan to buy this NFT?",
+      icon: "warning",
+      buttons: true,
+      dangerMode: true,
+    }).then((willDelete) => {
+      if (willDelete) {
+        triggerSuccess();
+        onClose();
+        swal("You successfully bought this NFT", {
+          icon: "success",
         });
+      } else {
+        onClose();
+        swal("Goodbye!", { icon: "error" });
+      }
     });
+  }
+
+  // Trying PUT with fetch
+  function updateData() {
+    fetch("http://31.220.63.27:8080/api/savenft", {
+      method: "PUT",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({
+        data1: {
+          name: "Kufre Move",
+        },
+        data2: {
+          name: "You gon be fine my bro",
+          age: "25",
+          money: "8930238",
+          staked: "7023983",
+        },
+      }),
+    })
+      .then((res) => {
+        if (res.ok) {
+          console.log("PUT REQUEST SUCCESSFUL");
+        } else {
+          console.log("PUT request not successful");
+        }
+        return res;
+      })
+      .then((res) => res.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.log(error));
   }
 
   const [nftAmount, setNftAmount] = useState();
@@ -146,6 +208,12 @@ const MiniStatistics = ({
   const nftName = title;
   const nftPrice = usdAmount;
 
+  // this will call two functions.. one to change the price and the other to open modell
+  function executeOnopen() {
+    onOpen();
+    convertBalanceToNumbers();
+  }
+
   // var a = usdAmount;
   // a = a.replace(/\,/g, "");
   // console.log(a);
@@ -159,7 +227,7 @@ const MiniStatistics = ({
   // getiing nft data from remote api
   const [nftData, setNftData] = useState([]);
 
-  const nftUrl = "http://localhost:8000/nfts/";
+  const nftUrl = "http://31.220.63.27:8080/api/nftmarket";
 
   useEffect(() => {
     axios
@@ -189,7 +257,7 @@ const MiniStatistics = ({
 
   useEffect(() => {
     axios
-      .get("http://localhost:7000/customers")
+      .get("http://31.220.63.27:8080/api/customer")
       .then((res) => {
         setCustomerData(res.data);
         activateCustomer();
@@ -247,13 +315,13 @@ const MiniStatistics = ({
               CLICK TO BUY
             </Button>
           </ModalBody>
-          <ModalFooter>Balance: {customer?.money}</ModalFooter>
+          <ModalFooter>Wallet Balance: $ {customer?.money}</ModalFooter>
           <ModalCloseButton colorScheme="teal" />
         </ModalContent>
       </Modal>
 
       <Card minH="83px">
-        <img src={nftimage} alt="nft-image" p="15px" onClick={onOpen} />
+        <img src={nftimage} alt="nft-image" p="15px" onClick={executeOnopen} />
         <CardBody>
           <Flex flexDirection="row" align="center" justify="center" w="100%">
             <Stat me="auto">
@@ -282,7 +350,12 @@ const MiniStatistics = ({
                 </StatHelpText>
               </Flex>
             </Stat>
-            <IconBox onClick={onOpen} h={"45px"} w={"45px"} bg={iconTeal}>
+            <IconBox
+              onClick={executeOnopen}
+              h={"45px"}
+              w={"45px"}
+              bg={iconTeal}
+            >
               {icon}
             </IconBox>
           </Flex>

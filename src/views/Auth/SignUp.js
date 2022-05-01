@@ -7,13 +7,8 @@ import {
   GoogleAuthProvider,
   onAuthStateChanged,
   signInWithPopup,
-  signOut,
 } from 'firebase/auth';
-import {
-  FaFacebook,
-  FaGoogle,
-  FaTwitter,
-} from 'react-icons/fa';
+import { FaGoogle } from 'react-icons/fa';
 
 // Chakra imports
 import {
@@ -26,15 +21,8 @@ import {
   Icon,
   Input,
   Link,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
   Switch,
   Text,
-  Textarea,
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
@@ -60,22 +48,23 @@ function SignUp() {
         registerEmail,
         registerPassword
       );
-
-      onOpen();
-      // checkUser();
-
-      console.log(user);
     } catch (error) {
       let catchError = error.message;
-      let busssu = catchError.includes("email-already-in-use");
-      console.log(busssu);
+      let emailAlreadyInUse = catchError.includes("email-already-in-use");
+      let invalidEmail = catchError.includes("invalid-email");
+      let weakPassword = catchError.includes("auth/weak-password");
 
-      if (busssu) {
+      if (emailAlreadyInUse) {
         alert("Email Already Registered");
+      }
+      if (invalidEmail) {
+        alert("Provide a Valid Email Address");
+      }
+      if (weakPassword) {
+        alert("Password field should be more than 6 Characters");
       }
     }
   };
-
   function checkUser() {
     if (user?.email) {
       location.replace("/admin/dashboard");
@@ -83,19 +72,7 @@ function SignUp() {
       console.log(user);
     }
   }
-
-  // const logout = async() => {
-  //   await signOut(auth);
-  // }
-  function logout() {
-    signOut(auth)
-      .then(() => {
-        // Sign-out successful.
-      })
-      .catch((error) => {
-        // An error happened.
-      });
-  }
+  checkUser();
 
   // const signWithGoogle = getAuth();
   function signGoogle() {
@@ -130,52 +107,6 @@ function SignUp() {
   const bgIcons = useColorModeValue("teal.200", "rgba(255, 255, 255, 0.5)");
   return (
     <>
-      <Modal onClose={onClose} isOpen={isOpen} isCentered size="xl">
-        <ModalOverlay />
-
-        <ModalContent>
-          <ModalHeader>Complete Your Registration</ModalHeader>
-
-          <Text color="red.300" alignSelf="center">
-            Can not be updated later!
-          </Text>
-
-          <br />
-          <ModalBody pb={6}>
-            <FormControl>
-              <FormLabel>Twitter Username</FormLabel>
-              <Input placeholder="Optional" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Instagram Username</FormLabel>
-              <Input placeholder="Optional" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <FormLabel>Mobile Number (include country code)</FormLabel>
-              <Input placeholder="Optional" />
-            </FormControl>
-
-            <FormControl mt={4}>
-              <Flex direction="row">
-                {" "}
-                <Text color="red.300">*</Text>{" "}
-                <FormLabel>About Yourself</FormLabel>{" "}
-              </Flex>
-
-              <Textarea placeholder="Compulsory" height={100} required />
-            </FormControl>
-          </ModalBody>
-
-          <ModalFooter>
-            <Button onClick={checkUser} colorScheme="blue" mr={3}>
-              Save
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-
       <Flex
         direction="column"
         alignSelf="center"
@@ -210,14 +141,14 @@ function SignUp() {
             Welcome to Pluto Exchange
           </Text>
           <Text
-            fontSize="md"
+            fontSize="l"
             color="white"
             fontWeight="normal"
             mt="10px"
             mb="26px"
             w={{ base: "90%", sm: "60%", lg: "40%", xl: "30%" }}
           >
-            All we give are Profitable trades
+            THE FUTURE OF DECENTRALIZED FINANCE
           </Text>
         </Flex>
         <Flex alignItems="center" justifyContent="center" mb="60px" mt="20px">
@@ -247,6 +178,14 @@ function SignUp() {
                 w="75px"
                 h="75px"
                 borderRadius="15px"
+                transition="all .25s ease"
+              ></Flex>
+              <Flex
+                justify="center"
+                align="center"
+                w="75px"
+                h="75px"
+                borderRadius="15px"
                 border="1px solid lightgray"
                 cursor="pointer"
                 transition="all .25s ease"
@@ -268,40 +207,8 @@ function SignUp() {
                 w="75px"
                 h="75px"
                 borderRadius="15px"
-                border="1px solid lightgray"
-                cursor="pointer"
                 transition="all .25s ease"
-                _hover={{ filter: "brightness(120%)", bg: bgIcons }}
-              >
-                <Link href="#">
-                  <Icon
-                    as={FaTwitter}
-                    w="30px"
-                    h="30px"
-                    _hover={{ filter: "brightness(120%)" }}
-                  />
-                </Link>
-              </Flex>
-              <Flex
-                justify="center"
-                align="center"
-                w="75px"
-                h="75px"
-                borderRadius="15px"
-                border="1px solid lightgray"
-                cursor="pointer"
-                transition="all .25s ease"
-                _hover={{ filter: "brightness(120%)", bg: bgIcons }}
-              >
-                <Link href="#">
-                  <Icon
-                    as={FaFacebook}
-                    w="30px"
-                    h="30px"
-                    _hover={{ filter: "brightness(120%)" }}
-                  />
-                </Link>
-              </Flex>
+              ></Flex>
             </HStack>
             <Text
               fontSize="lg"
@@ -359,6 +266,11 @@ function SignUp() {
                   setRegisterPassword(e.target.value);
                 }}
               />
+              <Text>
+                <div>Password Requirements:</div>
+                <div> at least 8 characters</div>
+              </Text>
+              <br />
               <FormControl display="flex" alignItems="center" mb="24px">
                 <Switch id="remember-login" colorScheme="teal" me="10px" />
                 <FormLabel htmlFor="remember-login" mb="0" fontWeight="normal">

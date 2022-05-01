@@ -1,25 +1,25 @@
-// Chakra imports
-import {
-  Box,
-  Button,
-  Flex,
-  HStack,
-  Link,
-  Text,
-  useColorModeValue,
-} from "@chakra-ui/react";
+import React from 'react';
+
 import {
   CreativeTimLogo,
   DocumentIcon,
   HomeIcon,
   PersonIcon,
   RocketIcon,
-} from "components/Icons/Icons";
-import SidebarResponsive from "components/Sidebar/SidebarResponsive";
-import PropTypes from "prop-types";
-import React from "react";
-import { NavLink } from "react-router-dom";
-import routes from "routes.js";
+} from 'components/Icons/Icons';
+import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
+
+// Chakra imports
+import {
+  Button,
+  Flex,
+  HStack,
+  Link,
+  Text,
+  useColorModeValue,
+} from '@chakra-ui/react';
+
 export default function AuthNavbar(props) {
   const [open, setOpen] = React.useState(false);
   const handleDrawerToggle = () => {
@@ -93,7 +93,7 @@ export default function AuthNavbar(props) {
           ms="0px"
           me="0px"
           px="0px"
-          me={{ sm: "2px", md: "16px" }}
+          // me={{ sm: "2px", md: "16px" }}
           color={navbarIcon}
           variant="transparent-with-icon"
           leftIcon={<HomeIcon color={navbarIcon} w="12px" h="12px" me="0px" />}
@@ -107,7 +107,7 @@ export default function AuthNavbar(props) {
           ms="0px"
           me="0px"
           px="0px"
-          me={{ sm: "2px", md: "16px" }}
+          // me={{ sm: "2px", md: "16px" }}
           color={navbarIcon}
           variant="transparent-with-icon"
           leftIcon={
@@ -123,7 +123,7 @@ export default function AuthNavbar(props) {
           ms="0px"
           me="0px"
           px="0px"
-          me={{ sm: "2px", md: "16px" }}
+          // me={{ sm: "2px", md: "16px" }}
           color={navbarIcon}
           variant="transparent-with-icon"
           leftIcon={
@@ -168,9 +168,7 @@ export default function AuthNavbar(props) {
       width="1044px"
       maxW="90%"
       alignItems="center"
-    >
-      
-    </Flex>
+    ></Flex>
   );
 }
 
